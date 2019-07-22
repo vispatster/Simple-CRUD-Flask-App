@@ -1,0 +1,31 @@
+version: "3"
+services:
+  web:
+    links:
+      - "db"
+    build: .
+    ports:
+      - "8080:5000"
+    volumes:
+      - .:/app
+    entrypoint:
+      - python
+      - run.py
+      - db
+      - migrate
+      - upgrade
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+#    restart: always
+    environment:
+      - MYSQL_DATABASE: 'dreamteam_db'
+      - MYSQL_USER: 'dt_admin'
+      - MYSQL_PASSWORD: 'dt2016'
+      - MYSQL_ROOT_PASSWORD: 'dt2016'
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - '3306:3306'
